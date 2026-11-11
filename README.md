@@ -60,13 +60,34 @@ c = Canary(serve_v1, serve_v2,
            ramp_steps=[10, 50])
 ```
 
+## Go implementation
+
+A Go port lives in this same repo (`canary.go` / `canary_test.go`, module
+`github.com/TechGuardCoders/Canary`). The Python version above stays as the
+reference implementation; both are kept behaviorally identical — same ramp
+curve, same thresholds, same hash-based deterministic routing (SHA-256 in
+both), same terminal-state semantics.
+
+```go
+c := canary.New(serveV1, serveV2, nil, nil)
+
+result, err := c.Route(userID) // per request
+
+fmt.Println(c.State()) // {Pct:5 Status:ramping ...}
+```
+
+Run the Go tests with `go test ./...`.
+
 ## Results
 
-- 16 tests, all passing: routing determinism, percentage accuracy (~25% ± 5pts
-  over 10k keys), ramp progression, error-rate and latency rollback, terminal
-  state stickiness, sample recording on success and exception.
-- Pure Python, zero dependencies, no network in tests.
+- 16 Python tests + 16 Go tests, all passing: routing determinism, percentage
+  accuracy (~25% ± 5pts over 10k keys), ramp progression, error-rate and
+  latency rollback, terminal state stickiness, sample recording on success
+  and exception.
+- Python: pure stdlib, zero dependencies. Go: stdlib only, no external modules.
+- Verified on the fleet: spark-58c4 (.182), spark-ebbf (.198), Mac mini .157,
+  Mac Studio .11, Mac mini-4 .169.
 
 ## CI
 
-GitHub Actions runs `pytest -q` on every push.
+GitHub Actions runs `pytest -q` and `go test ./...` (setup-go@v5) on every push.
