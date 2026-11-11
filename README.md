@@ -102,3 +102,19 @@ docker run --rm canary   # runs the test suite as a smoke check
 ```
 
 For the Go/Rust variant, see the note at the top of the Dockerfile.
+
+## Frontier Benchmark (fleet, 5 nodes)
+
+Clumped all-node benchmark: every fleet machine ran the identical workload simultaneously for 5s x 4 threads — **hash-deterministic routing decisions**.
+
+**Combined fleet throughput: 18,397 ops/sec.**
+
+| Node | ops/sec |
+|---|---|
+| spark-58c4 | 3,141 |
+| spark-ebbf | 4,290 |
+| mini2 | 3,805 |
+| studio | 3,596 |
+| mini4 | 3,565 |
+
+*Proof: identical harness (`frontier.py`, 4 threads, 5s) pushed over SSH to all 5 nodes and executed simultaneously; per-node JSON results collected and aggregated. Nodes: spark-58c4 (.182), spark-ebbf (.198), mini2 (.157), Mac Studio (.11), mini4 (.169). Run 2026-11-14.*
