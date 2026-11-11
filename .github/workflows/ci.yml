@@ -20,3 +20,9 @@ jobs:
         with:
           go-version: "1.22"
       - run: go test ./...
+
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t ${{ github.event.repository.name }}:ci .

@@ -91,3 +91,14 @@ Run the Go tests with `go test ./...`.
 ## CI
 
 GitHub Actions runs `pytest -q` and `go test ./...` (setup-go@v5) on every push.
+
+## Docker
+
+Multi-stage, multi-arch image (linux/amd64 + linux/arm64) built on `python:3.12-slim`:
+
+```bash
+docker build -t canary .
+docker run --rm canary   # runs the test suite as a smoke check
+```
+
+For the Go/Rust variant, see the note at the top of the Dockerfile.
