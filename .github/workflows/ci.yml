@@ -25,4 +25,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: docker build -t ${{ github.event.repository.name }}:ci .
+      - run: docker build -t $(echo "${{ github.event.repository.name }}" | tr "A-Z" "a-z"):ci .
